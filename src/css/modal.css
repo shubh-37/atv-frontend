@@ -1,0 +1,79 @@
+.modal-background{
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;   
+  overflow-y: auto; 
+  text-align: center;
+  pointer-events: auto;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.modal-container{
+  width: 20rem;
+  height: 30rem;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  z-index:99999999999;
+}
+
+.modal-container .modal-header{
+  display: inline-block;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.close-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-btn button{
+  background-color: transparent;
+  border: none;
+  font-size: medium;
+  cursor: pointer;
+}
+
+.modal-container .modal-body{
+  flex: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.7rem;
+  text-align: center;
+  flex-direction: column;
+}
+
+.modal-container .modal-footer{
+  flex: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container .modal-footer button{
+  width: 150px;
+  height: 45px;
+  margin: 10px;
+  border: none;
+  background-color: cornflowerblue;
+  color: white;
+  border-radius: 0.3rem;
+  font-size: medium;
+  cursor: pointer;
+}
+
+.modal-container .modal-footer .cancel-btn{
+  background-color: var(--btn-secondary);
+}
