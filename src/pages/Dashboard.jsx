@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ProductForm from "./ProductForm";
+import ProductForm from "../components/ProductForm";
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);

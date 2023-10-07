@@ -1,9 +1,8 @@
 import { useRef } from "react";
 import { useState } from "react";
 import Webcam from "react-webcam";
-import Quagga from "quagga";
 import "../css/modal.css";
-import Scanner from "../components/Scanner";
+import Scanner from "./Scanner";
 // eslint-disable-next-line react/prop-types
 export default function ProductForm({ noChangeModal }) {
   const [camera, setCamera] = useState(false);
@@ -12,9 +11,7 @@ export default function ProductForm({ noChangeModal }) {
   const onDetected = (result) => {
     setResult(result);
   };
-  const [scanBarcode, setScanBarcode] = useState(false);
   const [click, setClick] = useState(false);
-  const [code, setCode] = useState("shubh");
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const captureImage = () => {
@@ -35,54 +32,7 @@ export default function ProductForm({ noChangeModal }) {
       console.log(formData);
     }
   };
-  function startBarcodeScanning() {
-    setScanBarcode(true);
-    const scannerContainer = document.getElementById("scanner-container"); // Check if 'scanner-container' exists in your HTML
-    if (!scannerContainer) {
-      console.error('Element with id "scanner-container" not found.');
-      return;
-    }
-    Quagga.init(
-      {
-        inputStream: {
-          type: "LiveStream",
-          target: scannerContainer,
-          constraints: {
-            width: 300,
-            height: 300,
-          },
-        },
-        decoder: {
-          readers: ["code_128_reader"],
-        },
-      },
-      (err) => {
-        if (err) {
-          console.error("Error initializing Quagga:", err);
-        } else {
-          Quagga.start();
-          Quagga.onDetected((result) => {
-            console.log("here");
-            const code128 = result.codeResult.code;
-            // Handle the scanned barcode data (e.g., display it or send it to a server)
-            // scannerContainer.innerText = code;
-            setCode(code128);
-            console.log("Scanned Barcode:", code128);
-          });
-        }
-      }
-    );
-  }
-  function stopBarcodeScanning() {
-    setScanBarcode(false);
-    try {
-      Quagga.stop();
-      Quagga.offDetected();
-    } catch (error) {
-      console.error("Error stopping Quagga:", error);
-    }
-  }
-
+  
   return (
     <div>
       {/* this div is for the background */}
@@ -97,8 +47,6 @@ export default function ProductForm({ noChangeModal }) {
           backgroundColor: "grey",
         }}
       ></div>
-      <div>hello</div>
-      <div id="scanner-container">code: {code}</div>
       <div className="modal-background">
         <div className="modal-container">
           <div className="close-btn">
