@@ -1,46 +1,60 @@
 import { useContext } from "react";
 import { useRef } from "react";
 import { useState } from "react";
-import randomstring from "randomstring";
 import Webcam from "react-webcam";
 import { productContext } from "../context/ProductContextProvider";
 import "../css/modal.css";
+import { nanoid } from "nanoid";
 import Scanner from "./Scanner";
 // eslint-disable-next-line react/prop-types
 export default function ProductForm({ noChangeModal }) {
   const [camera, setCamera] = useState(false);
-  const [result, setResult] = useState(null);
-  const { barcode, createProduct } = useContext(productContext);
-
+  const { barcode, createProduct, setBarcode } = useContext(productContext);
+  const videoConstraints = {
+    width: 300, // Set the desired width
+    height: 320, // Set the desired height
+    facingMode: "user", // You can specify 'user' for the front camera or 'environment' for the rear camera
+  };
   const onDetected = (result) => {
-    setResult(result);
+    setBarcode(result);
   };
   const [click, setClick] = useState(false);
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [categoryData, setCategoryData] = useState({});
   const captureImage = () => {
+    // image is base64 encoded
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
+    console.log(imageSrc);
   };
 
-  const uploadImage = () => {
+  const uploadImage = async () => {
     if (capturedImage) {
       const formData = new FormData();
-      const randomName = randomstring.generate({
-        charset: "abcdefghijklmnopqrstuvwxyz01234567890",
-        length: 8,
+      const fileName = `${nanoid()}.jpeg`;
+      const blob = await (await fetch(capturedImage)).blob();
+      console.log(blob);
+
+      const file = new File([blob], fileName, {
+        type: "image/jpeg",
+        lastModified: new Date(),
       });
-      const fileName = `${randomName}.jpeg`;
-      formData.append("image", capturedImage, fileName);
+      console.log({ file });
+      formData.append("image", file, fileName);
       formData.append("barcode", barcode);
-      // Send the captured image to the server using Axios or your preferred HTTP library
-      // axios.post("/upload", formData).then((response) => {
-      //   // Handle the server response as needed
-      //   console.log("Image uploaded:", response.data);
-      // });
       createProduct(formData);
     }
   };
+
+  function categoryHandler(e) {
+    setCategoryData({
+      ...categoryData,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  function createAndCloseModal() {}
 
   return (
     <div>
@@ -65,19 +79,25 @@ export default function ProductForm({ noChangeModal }) {
             <h2>Please enter product details</h2>
           </div>
           <div className="modal-body">
-            <p>{result ? result : "Scanning..."}</p>
+            <p>{barcode ? barcode : "Barcode value will come here"}</p>
             <button onClick={() => setCamera(!camera)}>
-              {camera ? "Stop" : "Start"}
+              {camera ? "Stop scanning" : "Scan barcode"}
             </button>
-            <div className="container">
+            <div
+              className="container"
+              style={{ position: "sticky", top: 0, right: 0 }}
+            >
               {camera && <Scanner onDetected={onDetected} />}
             </div>
-            <button onClick={() => setClick(!click)}>Click image</button>
+            <button onClick={() => setClick(!click)}>
+              {click ? "Close camera" : "Click image"}
+            </button>
             {click && (
               <div>
                 <Webcam
                   audio={false}
                   ref={webcamRef}
+                  videoConstraints={videoConstraints}
                   screenshotFormat="image/jpeg"
                 />
                 <button onClick={captureImage}>Capture Image</button>
@@ -89,8 +109,51 @@ export default function ProductForm({ noChangeModal }) {
                 )}
               </div>
             )}
+            <select
+              name="categoryOne"
+              id=""
+              onChange={(e) => categoryHandler(e)}
+            >
+              <option value="" disabled>
+                Choose from category 1
+              </option>
+              <option value="Category1Value1">value1</option>
+              <option value="Category1Value2">value2</option>
+              <option value="Category1Value3">value3</option>
+            </select>
+            <select
+              name="categoryTwo"
+              id=""
+              onChange={(e) => categoryHandler(e)}
+            >
+              <option value="" disabled>
+                Choose from category 2
+              </option>
+              <option value="Category2Value1">value1</option>
+              <option value="Category2Value2">value2</option>
+              <option value="Category2Value3">value3</option>
+            </select>
+            <select
+              name="categoryThree"
+              id=""
+              onChange={(e) => categoryHandler(e)}
+            >
+              <option value="" disabled>
+                Choose from category 3
+              </option>
+              <option value="Category3Value1">value1</option>
+              <option value="Category3Value2">value2</option>
+              <option value="Category3Value3">value3</option>
+            </select>
           </div>
-          <div className="modal-footer"></div>
+          <div className="modal-footer">
+            <button onClick={() => noChangeModal(false)} className="cancel-btn">
+              Cancel
+            </button>
+            <button onClick={() => createAndCloseModal()}>
+              Create Product
+            </button>
+          </div>
         </div>
       </div>
     </div>
