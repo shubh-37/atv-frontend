@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useState } from "react";
 import Webcam from "react-webcam";
 import Quagga from "quagga";
@@ -53,6 +53,12 @@ export default function ProductForm({ noChangeModal }) {
           console.error("Error initializing Quagga:", err);
         } else {
           Quagga.start();
+          Quagga.onDetected((result) => {
+            const code = result.codeResult.code;
+            // Handle the scanned barcode data (e.g., display it or send it to a server)
+            scannerContainer.innerHTML = code;
+            console.log("Scanned Barcode:", code);
+          });
         }
       }
     );
