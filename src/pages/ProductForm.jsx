@@ -3,8 +3,15 @@ import { useState } from "react";
 import Webcam from "react-webcam";
 import Quagga from "quagga";
 import "../css/modal.css";
+import Scanner from "../components/Scanner";
 // eslint-disable-next-line react/prop-types
 export default function ProductForm({ noChangeModal }) {
+  const [camera, setCamera] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const onDetected = (result) => {
+    setResult(result);
+  };
   const [scanBarcode, setScanBarcode] = useState(false);
   const [click, setClick] = useState(false);
   const [code, setCode] = useState("shubh");
@@ -101,16 +108,13 @@ export default function ProductForm({ noChangeModal }) {
             <h2>Please enter product details</h2>
           </div>
           <div className="modal-body">
-            {scanBarcode ? (
-              <>
-                <button onClick={stopBarcodeScanning}>Stop Scan</button>
-                {/* Add an element to display the barcode scan results */}
-              </>
-            ) : (
-              <button onClick={startBarcodeScanning}>Start Barcode Scan</button>
-            )}
-
-            <span>here will be the barcode value after scaning the value</span>
+            <p>{result ? result : "Scanning..."}</p>
+            <button onClick={() => setCamera(!camera)}>
+              {camera ? "Stop" : "Start"}
+            </button>
+            <div className="container">
+              {camera && <Scanner onDetected={onDetected} />}
+            </div>
             <button onClick={() => setClick(!click)}>Click image</button>
             {click && (
               <div>
