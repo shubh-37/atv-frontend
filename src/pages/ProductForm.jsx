@@ -55,6 +55,7 @@ export default function ProductForm({ noChangeModal }) {
         } else {
           Quagga.start();
           Quagga.onDetected((result) => {
+            console.log("here");
             const code128 = result.codeResult.code;
             // Handle the scanned barcode data (e.g., display it or send it to a server)
             // scannerContainer.innerText = code;
