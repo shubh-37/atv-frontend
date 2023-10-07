@@ -7,6 +7,7 @@ import "../css/modal.css";
 export default function ProductForm({ noChangeModal }) {
   const [scanBarcode, setScanBarcode] = useState(false);
   const [click, setClick] = useState(false);
+  const [code, setCode] = useState("shubh");
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const captureImage = () => {
@@ -54,10 +55,11 @@ export default function ProductForm({ noChangeModal }) {
         } else {
           Quagga.start();
           Quagga.onDetected((result) => {
-            const code = result.codeResult.code;
+            const code128 = result.codeResult.code;
             // Handle the scanned barcode data (e.g., display it or send it to a server)
-            scannerContainer.innerHTML = code;
-            console.log("Scanned Barcode:", code);
+            // scannerContainer.innerText = code;
+            setCode(code128);
+            console.log("Scanned Barcode:", code128);
           });
         }
       }
@@ -88,6 +90,7 @@ export default function ProductForm({ noChangeModal }) {
         }}
       ></div>
       <div>hello</div>
+      <div id="scanner-container">code: {code}</div>
       <div className="modal-background">
         <div className="modal-container">
           <div className="close-btn">
@@ -105,7 +108,7 @@ export default function ProductForm({ noChangeModal }) {
             ) : (
               <button onClick={startBarcodeScanning}>Start Barcode Scan</button>
             )}
-            <div id="scanner-container"></div>
+
             <span>here will be the barcode value after scaning the value</span>
             <button onClick={() => setClick(!click)}>Click image</button>
             {click && (
