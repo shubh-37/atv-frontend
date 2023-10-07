@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import Quagga from "quagga";
+import { useContext } from "react";
+import { productContext } from "../context/ProductContextProvider";
 
 const Scanner = (props) => {
   // eslint-disable-next-line react/prop-types
   const { onDetected } = props;
+  const { setBarcode } = useContext(productContext);
 
   const config = {
     inputStream: {
@@ -85,6 +88,7 @@ const Scanner = (props) => {
   }, []);
 
   const detected = (result) => {
+    setBarcode(result.codeResult.code);
     onDetected(result.codeResult.code);
   };
 
