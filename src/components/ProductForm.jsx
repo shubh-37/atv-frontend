@@ -17,6 +17,7 @@ export default function ProductForm({ noChangeModal }) {
   const captureImage = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
+    console.log(imageSrc);
   };
 
   const uploadImage = () => {
@@ -32,7 +33,7 @@ export default function ProductForm({ noChangeModal }) {
       console.log(formData);
     }
   };
-  
+
   return (
     <div>
       {/* this div is for the background */}
