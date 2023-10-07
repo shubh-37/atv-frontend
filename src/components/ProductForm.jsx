@@ -1,12 +1,16 @@
+import { useContext } from "react";
 import { useRef } from "react";
 import { useState } from "react";
+import randomstring from "randomstring";
 import Webcam from "react-webcam";
+import { productContext } from "../context/ProductContextProvider";
 import "../css/modal.css";
 import Scanner from "./Scanner";
 // eslint-disable-next-line react/prop-types
 export default function ProductForm({ noChangeModal }) {
   const [camera, setCamera] = useState(false);
   const [result, setResult] = useState(null);
+  const { barcode, createProduct } = useContext(productContext);
 
   const onDetected = (result) => {
     setResult(result);
@@ -17,20 +21,24 @@ export default function ProductForm({ noChangeModal }) {
   const captureImage = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
-    console.log(imageSrc);
   };
 
   const uploadImage = () => {
     if (capturedImage) {
       const formData = new FormData();
-      formData.append("image", capturedImage);
-
+      const randomName = randomstring.generate({
+        charset: "abcdefghijklmnopqrstuvwxyz01234567890",
+        length: 8,
+      });
+      const fileName = `${randomName}.jpeg`;
+      formData.append("image", capturedImage, fileName);
+      formData.append("barcode", barcode);
       // Send the captured image to the server using Axios or your preferred HTTP library
       // axios.post("/upload", formData).then((response) => {
       //   // Handle the server response as needed
       //   console.log("Image uploaded:", response.data);
       // });
-      console.log(formData);
+      createProduct(formData);
     }
   };
 
