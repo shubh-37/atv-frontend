@@ -17,7 +17,7 @@
 
 .modal-container{
   width: 20rem;
-  height: 30rem;
+  /* height: 30rem; */
   border-radius: 0.5rem;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -75,5 +75,5 @@
 }
 
 .modal-container .modal-footer .cancel-btn{
-  background-color: var(--btn-secondary);
+  background-color: red;
 }
