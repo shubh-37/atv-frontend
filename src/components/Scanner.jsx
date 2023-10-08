@@ -22,7 +22,7 @@ const Scanner = (props) => {
     numOfWorkers: 2,
     frequency: 10,
     decoder: {
-      readers: ["code_128_reader"],
+      readers: ["code_93_reader"],
     },
     locate: true,
   };
