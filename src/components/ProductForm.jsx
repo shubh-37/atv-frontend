@@ -84,10 +84,7 @@ export default function ProductForm({ noChangeModal }) {
             <button onClick={() => setCamera(!camera)}>
               {camera ? "Stop scanning" : "Scan barcode"}
             </button>
-            <div
-              className="container"
-              style={{ position: "sticky", top: 0, right: 0 }}
-            >
+            <div className="container">
               {camera && <Scanner onDetected={onDetected} />}
             </div>
             <button onClick={() => setClick(!click)}>
