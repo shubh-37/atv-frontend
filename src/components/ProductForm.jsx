@@ -9,7 +9,7 @@ import { nanoid } from "nanoid";
 // eslint-disable-next-line react/prop-types
 export default function ProductForm({ noChangeModal }) {
   
-  const { barcode, createProduct, setBarcode } = useContext(productContext);
+  const { barcode, createProduct } = useContext(productContext);
   const videoConstraints = {
     width: 300, // Set the desired width
     height: 320, // Set the desired height
