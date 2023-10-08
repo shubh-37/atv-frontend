@@ -9,14 +9,14 @@ const Scanner = (props) => {
     inputStream: {
       type: "LiveStream",
       constraints: {
-        width: { max: 350 },
+        width: { max: 300 },
         height: { max: 300 },
         facingMode: "environment",
         aspectRatio: { min: 1, max: 2 },
       },
     },
     locator: {
-      patchSize: "small",
+      patchSize: "medium",
       halfSample: true,
     },
     numOfWorkers: 2,
@@ -37,9 +37,10 @@ const Scanner = (props) => {
         Quagga.stop();
       };
     });
-
+    console.log("inside useEff");
     //detecting boxes on stream
     Quagga.onProcessed((result) => {
+      console.log("inside processing");
       var drawingCtx = Quagga.canvas.ctx.overlay,
         drawingCanvas = Quagga.canvas.dom.overlay;
 
@@ -80,7 +81,7 @@ const Scanner = (props) => {
         }
       }
     });
-
+    console.log("some");
     Quagga.onDetected(detected);
   }, []);
 
