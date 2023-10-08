@@ -7,6 +7,7 @@ const Scanner = (props) => {
 
   const config = {
     inputStream: {
+      name: "Live",
       type: "LiveStream",
       constraints: {
         width: { max: 300 },
@@ -19,7 +20,7 @@ const Scanner = (props) => {
       patchSize: "medium",
       halfSample: true,
     },
-    numOfWorkers: 2,
+    numOfWorkers: window.navigator.hardwareConcurrency,
     frequency: 10,
     decoder: {
       readers: ["code_93_reader"],
