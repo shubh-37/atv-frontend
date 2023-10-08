@@ -1,19 +1,16 @@
 import { useEffect } from "react";
 import Quagga from "quagga";
-import { useContext } from "react";
-import { productContext } from "../context/ProductContextProvider";
 
 const Scanner = (props) => {
   // eslint-disable-next-line react/prop-types
   const { onDetected } = props;
-  const { setBarcode } = useContext(productContext);
 
   const config = {
     inputStream: {
       type: "LiveStream",
       constraints: {
-        width: { min: 250, max: 300 },
-        height: { min: 200, max: 300 },
+        width: { max: 350 },
+        height: { max: 300 },
         facingMode: "environment",
         aspectRatio: { min: 1, max: 2 },
       },
@@ -45,6 +42,7 @@ const Scanner = (props) => {
     Quagga.onProcessed((result) => {
       var drawingCtx = Quagga.canvas.ctx.overlay,
         drawingCanvas = Quagga.canvas.dom.overlay;
+
       if (result) {
         if (result.boxes) {
           drawingCtx.clearRect(

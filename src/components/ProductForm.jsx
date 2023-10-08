@@ -26,7 +26,6 @@ export default function ProductForm({ noChangeModal }) {
     // image is base64 encoded
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
-    console.log(imageSrc);
   };
 
   const uploadImage = async () => {
@@ -79,7 +78,9 @@ export default function ProductForm({ noChangeModal }) {
             <h2>Please enter product details</h2>
           </div>
           <div className="modal-body">
-            <p>{barcode ? barcode : "Barcode value will come here"}</p>
+            <p>
+              {barcode.length > 0 ? barcode : "Barcode value will come here"}
+            </p>
             <button onClick={() => setCamera(!camera)}>
               {camera ? "Stop scanning" : "Scan barcode"}
             </button>
