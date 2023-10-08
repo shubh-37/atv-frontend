@@ -12,8 +12,8 @@ const Scanner = (props) => {
     inputStream: {
       type: "LiveStream",
       constraints: {
-        width: 450,
-        height: 300,
+        width: { min: 250, max: 300 },
+        height: { min: 200, max: 300 },
         facingMode: "environment",
         aspectRatio: { min: 1, max: 2 },
       },
