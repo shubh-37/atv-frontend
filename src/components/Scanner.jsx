@@ -87,8 +87,8 @@ const Scanner = (props) => {
   }, []);
 
   const detected = (result) => {
-    setBarcode(result.codeResult.code);
     onDetected(result.codeResult.code);
+    setBarcode(result.codeResult.code);
   };
 
   return (
