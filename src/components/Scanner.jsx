@@ -12,7 +12,7 @@ const Scanner = (props) => {
     inputStream: {
       type: "LiveStream",
       constraints: {
-        width: 300,
+        width: 450,
         height: 300,
         facingMode: "environment",
         aspectRatio: { min: 1, max: 2 },
@@ -45,7 +45,6 @@ const Scanner = (props) => {
     Quagga.onProcessed((result) => {
       var drawingCtx = Quagga.canvas.ctx.overlay,
         drawingCanvas = Quagga.canvas.dom.overlay;
-
       if (result) {
         if (result.boxes) {
           drawingCtx.clearRect(
