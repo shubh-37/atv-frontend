@@ -5,19 +5,17 @@ import Webcam from "react-webcam";
 import { productContext } from "../context/ProductContextProvider";
 import "../css/modal.css";
 import { nanoid } from "nanoid";
-import Scanner from "./Scanner";
+
 // eslint-disable-next-line react/prop-types
 export default function ProductForm({ noChangeModal }) {
-  const [camera, setCamera] = useState(false);
+  
   const { barcode, createProduct, setBarcode } = useContext(productContext);
   const videoConstraints = {
     width: 300, // Set the desired width
     height: 320, // Set the desired height
     facingMode: "user", // You can specify 'user' for the front camera or 'environment' for the rear camera
   };
-  const onDetected = (result) => {
-    setBarcode(result);
-  };
+ 
   const [click, setClick] = useState(false);
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -78,15 +76,7 @@ export default function ProductForm({ noChangeModal }) {
             <h2>Please enter product details</h2>
           </div>
           <div className="modal-body">
-            <p>
-              {barcode.length > 0 ? barcode : "Barcode value will come here"}
-            </p>
-            <button onClick={() => setCamera(!camera)}>
-              {camera ? "Stop scanning" : "Scan barcode"}
-            </button>
-            <div className="container">
-              {camera && <Scanner onDetected={onDetected} />}
-            </div>
+            
             <button onClick={() => setClick(!click)}>
               {click ? "Close camera" : "Click image"}
             </button>
