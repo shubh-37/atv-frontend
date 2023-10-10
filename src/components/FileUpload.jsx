@@ -21,6 +21,9 @@ const FileBarcodeDecoder = () => {
             src: imageBase64,
             numOfWorkers: 0,
             decoder: { readers: ["code_93_reader"] }, // Use the Code 93 reader
+            locate: true,
+            area: { top: "10%", right: "10%", left: "10%", bottom: "10%" }, // Adjust the area of interest
+            // Adjust other properties as needed
           },
           (result) => {
             if (result && result.codeResult) {
