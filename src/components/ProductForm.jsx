@@ -132,7 +132,7 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
           </div>
           <div className="modal-body">
             <h4>Barcode: {barcode}</h4>
-            <button onClick={() => setClick(!click)}>
+            <button className="button1" onClick={() => setClick(!click)}>
               {click ? "Close camera" : "Open camera"}
             </button>
             {click && (
@@ -146,7 +146,7 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
                   />
                 </div>
 
-                <button onClick={captureImage}>Capture Image</button>
+                <button className="button2" onClick={captureImage}>Capture Image</button>
               </div>
             )}
             {(product?.imageUrl ?? capturedImage) && (
@@ -155,9 +155,11 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
                 {/* <button onClick={uploadImage}>Upload Image</button> */}
               </div>
             )}
+            <label htmlFor="cat1">Category 1</label>
             <select
+            className="input2"
               name="categoryOne"
-              id=""
+              id="cat1"
               onChange={(e) => categoryHandler(e)}
             >
               <option value="Choose from category 1" disabled>
@@ -167,9 +169,11 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
               <option value="Category1Value2">value2</option>
               <option value="Category1Value3">value3</option>
             </select>
+            <label htmlFor="cat2">Category 2</label>
             <select
+            className="input2"
               name="categoryTwo"
-              id=""
+              id="cat2"
               onChange={(e) => categoryHandler(e)}
             >
               <option value="" disabled>
@@ -179,9 +183,11 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
               <option value="Category2Value2">value2</option>
               <option value="Category2Value3">value3</option>
             </select>
+            <label htmlFor="cat3">Category 2</label>
             <select
+            className="input2"
               name="categoryThree"
-              id=""
+              id="cat3"
               onChange={(e) => categoryHandler(e)}
             >
               <option value="" disabled>

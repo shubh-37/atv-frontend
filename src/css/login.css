@@ -1,5 +1,5 @@
 .signup-parent{
-  border: 1px solid #2563eb;
+  border: 1px solid #007bff;
     display: flex;
     flex-direction: column;
     width: 18rem;
@@ -10,11 +10,12 @@
     transform: translate(-50%, -50%);
     background-color: white;
     border-radius: 1rem;
+    font-size: larger;
 }
 
 .signup-link{
   text-decoration: none;
-  color: #2563eb;
+  color: #007bff;
 }
 
 .signup-heading{
@@ -27,7 +28,7 @@
 .signup-btn{
   width: 100%;
   color: white;
-  background-color: #1e3a8a;
+  background-color: #007bff;
   cursor: pointer;
   font-size: 15px;
   border-radius: 0.3rem;
@@ -37,6 +38,7 @@
 }
 
 .form-parent{
+  font-size: larger;
   display: flex;
   flex-direction: column;
 }
@@ -54,7 +56,7 @@
   display: flex;
   width: 100%;
   height: 100vh;
-  background-color: #1e3a8a;
+  background-color: #004c9d;
 }
 
 #remember{
@@ -65,10 +67,5 @@
 }
 
 .signup-text{
-  font-size: smaller;
   text-align: center;
-}
-
-label{
-  font-size: small;
 }

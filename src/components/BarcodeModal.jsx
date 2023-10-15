@@ -51,12 +51,14 @@ export default function BarcodeModal({ closeModal, openProductForm }) {
             <p>Enter barcode manually</p>
             <span>
               <input
+              className="input1"
+              placeholder="type barcode"
                 type="text"
                 name=""
                 id=""
                 onChange={(e) => setBarcode(e.target.value)}
               />
-              <button onClick={() => searchHandler()}>Upload</button>
+              <button className="button2" onClick={() => searchHandler()}>Upload</button>
             </span>
             <h3>OR</h3>
             <FileBarcodeDecoder />

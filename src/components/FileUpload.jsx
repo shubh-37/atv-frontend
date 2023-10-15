@@ -47,10 +47,10 @@ const FileBarcodeDecoder = () => {
   };
 
   return (
-    <div>
+    <div className="modal-body">
       <p>Upload a clear barcode image</p>
       <input type="file" accept="image/*" onChange={handleFileChange} />
-      <button onClick={decodeBarcodeFromFile}>Decode Barcode</button>
+      <button className="button1" onClick={decodeBarcodeFromFile}>Decode Barcode</button>
       <div>Decoded Barcode: {barcode}</div>
     </div>
   );
