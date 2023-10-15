@@ -2,7 +2,13 @@ import { createContext } from "react";
 import { useState } from "react";
 export const productContext = createContext();
 import axios from "axios";
-import { BAD_REQUEST, NOT_FOUND, SUCCESS, UNKNOWN } from "../constants";
+import {
+  BAD_REQUEST,
+  NOT_FOUND,
+  PRODUCT_FOUND,
+  SUCCESS,
+  UNKNOWN,
+} from "../constants";
 
 // eslint-disable-next-line react/prop-types
 export default function ProductContextProvider({ children }) {
@@ -15,8 +21,9 @@ export default function ProductContextProvider({ children }) {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
       if (response.status === 200) {
+        return PRODUCT_FOUND;
+      } else if (response.status === 201) {
         return SUCCESS;
       }
     } catch (error) {
@@ -36,7 +43,6 @@ export default function ProductContextProvider({ children }) {
           "Content-Type": "application/json",
         },
       });
-      console.log(response);
       if (response.status === 200) {
         setProduct(response.data.product);
         return SUCCESS;
