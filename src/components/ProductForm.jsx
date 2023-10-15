@@ -2,16 +2,67 @@ import { useContext } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import Webcam from "react-webcam";
+import { toast } from "react-toastify";
+import {
+  BAD_REQUEST,
+  CREATE_PRODUCT,
+  NO_IMAGE,
+  PRODUCT_FOUND,
+  SUCCESS,
+} from "../constants";
 import { productContext } from "../context/ProductContextProvider";
 import "../css/modal.css";
 import { nanoid } from "nanoid";
 import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-export default function ProductForm({ closeModal, closeBarcodeModal }) {
+export default function ProductForm({ closeModal }) {
   const { createProduct, barcode, product, setProduct } =
     useContext(productContext);
-  console.log({ product });
+  function notify(event, type) {
+    event.preventDefault();
+    if (type === CREATE_PRODUCT) {
+      toast.success("Product created successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else if (type === PRODUCT_FOUND) {
+      toast.success("Product updated successfully", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else if (type === NO_IMAGE) {
+      toast.error("No image selected!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      toast.error("Error, Please try again after sometimes", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
   const videoConstraints = {
     width: 250, // Set the desired width
     height: 250, // Set the desired height
@@ -35,7 +86,7 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
     });
   }
 
-  async function createAndCloseModal() {
+  async function createAndCloseModal(e) {
     if (capturedImage) {
       const formData = new FormData();
       const fileName = `${nanoid()}.jpeg`;
@@ -67,10 +118,18 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
       formData.append("barcode", barcode);
 
       const response = await createProduct(formData);
-      if (response) {
-        console.log("send toast");
+      if (response === SUCCESS) {
+        notify(e, CREATE_PRODUCT);
+        setProduct({});
         closeModal(false);
         navigate("/");
+      } else if (response === PRODUCT_FOUND) {
+        notify(e, PRODUCT_FOUND);
+        setProduct({});
+        closeModal(false);
+        navigate("/");
+      } else {
+        notify(e, BAD_REQUEST);
       }
     } else if (product.imageUrl.length > 0) {
       const formData = new FormData();
@@ -95,16 +154,21 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
       );
       formData.append("barcode", barcode);
       const response = await createProduct(formData);
-      if (response) {
-        console.log("send toast");
+      if (response === SUCCESS) {
+        notify(e, CREATE_PRODUCT);
+        setProduct({});
+        closeModal(false);
+        navigate("/");
+      } else if (response === PRODUCT_FOUND) {
+        notify(e, PRODUCT_FOUND);
         setProduct({});
         closeModal(false);
         navigate("/");
       } else {
-        console.log("send toast");
+        notify(e, BAD_REQUEST);
       }
     } else {
-      console.log("send error toast");
+      notify(e, NO_IMAGE);
     }
   }
 
@@ -146,7 +210,9 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
                   />
                 </div>
 
-                <button className="button2" onClick={captureImage}>Capture Image</button>
+                <button className="button2" onClick={captureImage}>
+                  Capture Image
+                </button>
               </div>
             )}
             {(product?.imageUrl ?? capturedImage) && (
@@ -157,7 +223,7 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
             )}
             <label htmlFor="cat1">Category 1</label>
             <select
-            className="input2"
+              className="input2"
               name="categoryOne"
               id="cat1"
               onChange={(e) => categoryHandler(e)}
@@ -171,7 +237,7 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
             </select>
             <label htmlFor="cat2">Category 2</label>
             <select
-            className="input2"
+              className="input2"
               name="categoryTwo"
               id="cat2"
               onChange={(e) => categoryHandler(e)}
@@ -185,7 +251,7 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
             </select>
             <label htmlFor="cat3">Category 2</label>
             <select
-            className="input2"
+              className="input2"
               name="categoryThree"
               id="cat3"
               onChange={(e) => categoryHandler(e)}
@@ -202,7 +268,7 @@ export default function ProductForm({ closeModal, closeBarcodeModal }) {
             <button onClick={() => closeModal(false)} className="cancel-btn">
               Cancel
             </button>
-            <button onClick={() => createAndCloseModal()}>
+            <button onClick={(e) => createAndCloseModal(e)}>
               Create Product
             </button>
           </div>
