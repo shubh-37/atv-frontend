@@ -17,7 +17,6 @@
 
 .modal-container{
   width: 20rem;
-  /* height: 30rem; */
   border-radius: 0.5rem;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -30,7 +29,7 @@
 .modal-container .modal-header{
   display: inline-block;
   text-align: center;
-  margin-top: 0.5rem;
+  /* margin-top: 0.5rem; */
 }
 
 .close-btn {
@@ -50,7 +49,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.7rem;
+  font-size: 1.3rem;
   text-align: center;
   flex-direction: column;
 }
@@ -63,9 +62,9 @@
 }
 
 .modal-container .modal-footer button{
-  width: 150px;
-  height: 45px;
-  margin: 10px;
+  width: 8rem;
+  padding: 0.5rem;
+  margin: 1rem;
   border: none;
   background-color: cornflowerblue;
   color: white;

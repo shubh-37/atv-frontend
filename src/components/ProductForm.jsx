@@ -5,53 +5,108 @@ import Webcam from "react-webcam";
 import { productContext } from "../context/ProductContextProvider";
 import "../css/modal.css";
 import { nanoid } from "nanoid";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-export default function ProductForm({ noChangeModal }) {
-  
-  const { barcode, createProduct } = useContext(productContext);
+export default function ProductForm({ closeModal, closeBarcodeModal }) {
+  const { createProduct, barcode, product, setProduct } =
+    useContext(productContext);
+  console.log({ product });
   const videoConstraints = {
-    width: 300, // Set the desired width
-    height: 320, // Set the desired height
-    facingMode: "user", // You can specify 'user' for the front camera or 'environment' for the rear camera
+    width: 250, // Set the desired width
+    height: 250, // Set the desired height
+    facingMode: "environment", // You can specify 'user' for the front camera or 'environment' for the rear camera
   };
- 
   const [click, setClick] = useState(false);
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [categoryData, setCategoryData] = useState({});
+  const navigate = useNavigate();
   const captureImage = () => {
     // image is base64 encoded
+    setProduct({ ...product, imageUrl: undefined });
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
   };
+  function categoryHandler(e) {
+    setCategoryData({
+      ...categoryData,
+      [e.target.name]: e.target.value ?? product[e.target.name],
+    });
+  }
 
-  const uploadImage = async () => {
+  async function createAndCloseModal() {
     if (capturedImage) {
       const formData = new FormData();
       const fileName = `${nanoid()}.jpeg`;
       const blob = await (await fetch(capturedImage)).blob();
-      console.log(blob);
 
       const file = new File([blob], fileName, {
         type: "image/jpeg",
         lastModified: new Date(),
       });
-      console.log({ file });
       formData.append("image", file, fileName);
+      formData.append(
+        "categoryOne",
+        categoryData.categoryOne
+          ? categoryData.categoryOne
+          : product?.categoryOne
+      );
+      formData.append(
+        "categoryTwo",
+        categoryData.categoryTwo
+          ? categoryData.categoryTwo
+          : product?.categoryTwo
+      );
+      formData.append(
+        "categoryThree",
+        categoryData.categoryThree
+          ? categoryData.categoryThree
+          : product?.categoryThree
+      );
       formData.append("barcode", barcode);
-      createProduct(formData);
+
+      const response = await createProduct(formData);
+      if (response) {
+        console.log("send toast");
+        closeModal(false);
+        navigate("/");
+      }
+    } else if (product.imageUrl.length > 0) {
+      const formData = new FormData();
+      formData.append("imageUrl", product.imageUrl);
+      formData.append(
+        "categoryOne",
+        categoryData.categoryOne
+          ? categoryData.categoryOne
+          : product?.categoryOne
+      );
+      formData.append(
+        "categoryTwo",
+        categoryData.categoryTwo
+          ? categoryData.categoryTwo
+          : product?.categoryTwo
+      );
+      formData.append(
+        "categoryThree",
+        categoryData.categoryThree
+          ? categoryData.categoryThree
+          : product?.categoryThree
+      );
+      formData.append("barcode", barcode);
+      const response = await createProduct(formData);
+      if (response) {
+        console.log("send toast");
+        setProduct({});
+        closeModal(false);
+        navigate("/");
+      } else {
+        console.log("send toast");
+      }
+    } else {
+      console.log("send error toast");
     }
-  };
-
-  function categoryHandler(e) {
-    setCategoryData({
-      ...categoryData,
-      [e.target.name]: e.target.value,
-    });
   }
-
-  function createAndCloseModal() {}
 
   return (
     <div>
@@ -70,31 +125,34 @@ export default function ProductForm({ noChangeModal }) {
       <div className="modal-background">
         <div className="modal-container">
           <div className="close-btn">
-            <button onClick={() => noChangeModal(false)}> X </button>
+            <button onClick={() => closeModal(false)}> X </button>
           </div>
           <div className="modal-header">
             <h2>Please enter product details</h2>
           </div>
           <div className="modal-body">
-            
+            <h4>Barcode: {barcode}</h4>
             <button onClick={() => setClick(!click)}>
-              {click ? "Close camera" : "Click image"}
+              {click ? "Close camera" : "Open camera"}
             </button>
             {click && (
               <div>
-                <Webcam
-                  audio={false}
-                  ref={webcamRef}
-                  videoConstraints={videoConstraints}
-                  screenshotFormat="image/jpeg"
-                />
+                <div className="webcam">
+                  <Webcam
+                    audio={false}
+                    ref={webcamRef}
+                    videoConstraints={videoConstraints}
+                    screenshotFormat="image/jpeg"
+                  />
+                </div>
+
                 <button onClick={captureImage}>Capture Image</button>
-                {capturedImage && (
-                  <div>
-                    <img src={capturedImage} alt="Captured" />
-                    <button onClick={uploadImage}>Upload Image</button>
-                  </div>
-                )}
+              </div>
+            )}
+            {(product?.imageUrl ?? capturedImage) && (
+              <div>
+                <img src={product?.imageUrl ?? capturedImage} alt="Captured" />
+                {/* <button onClick={uploadImage}>Upload Image</button> */}
               </div>
             )}
             <select
@@ -102,7 +160,7 @@ export default function ProductForm({ noChangeModal }) {
               id=""
               onChange={(e) => categoryHandler(e)}
             >
-              <option value="" disabled>
+              <option value="Choose from category 1" disabled>
                 Choose from category 1
               </option>
               <option value="Category1Value1">value1</option>
@@ -135,7 +193,7 @@ export default function ProductForm({ noChangeModal }) {
             </select>
           </div>
           <div className="modal-footer">
-            <button onClick={() => noChangeModal(false)} className="cancel-btn">
+            <button onClick={() => closeModal(false)} className="cancel-btn">
               Cancel
             </button>
             <button onClick={() => createAndCloseModal()}>

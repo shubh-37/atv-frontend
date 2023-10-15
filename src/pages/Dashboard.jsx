@@ -1,14 +1,21 @@
 import { useState } from "react";
+import BarcodeModal from "../components/BarcodeModal";
 import ProductForm from "../components/ProductForm";
-import FileBarcodeDecoder from "../components/FileUpload";
-export default function Dashboard() {
-  const [isOpen, setIsOpen] = useState(false);
+import "../css/dashboard.css";
 
+export default function Dashboard() {
+  const [isBarcodeOpen, setIsBarcodeOpen] = useState(false);
+  const [isProductFormOpen, setProductFormOpen] = useState(false);
   return (
-    <>
-      <button onClick={() => setIsOpen(true)}>Upload</button>
-      {isOpen && <ProductForm noChangeModal={setIsOpen} />}
-      <FileBarcodeDecoder />
-    </>
+    <div>
+      <button onClick={() => setIsBarcodeOpen(true)}>Scan barcode</button>
+      {isBarcodeOpen && (
+        <BarcodeModal
+          closeModal={setIsBarcodeOpen}
+          openProductForm={setProductFormOpen}
+        />
+      )}
+      {isProductFormOpen && <ProductForm closeModal={setProductFormOpen} closeBarcodeModal={setIsBarcodeOpen}/>}
+    </div>
   );
 }

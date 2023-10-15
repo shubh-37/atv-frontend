@@ -1,9 +1,12 @@
 import { useState } from "react";
 import Quagga from "quagga";
+import { useContext } from "react";
+import { productContext } from "../context/ProductContextProvider";
 
 const FileBarcodeDecoder = () => {
+  const { barcode, setBarcode } = useContext(productContext);
   const [file, setFile] = useState(null);
-  const [barcodeOutput, setBarcodeOutput] = useState("No barcode selected");
+  // const [barcodeOutput, setBarcodeOutput] = useState("No barcode selected");
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
@@ -28,10 +31,9 @@ const FileBarcodeDecoder = () => {
           (result) => {
             if (result && result.codeResult) {
               const decodedBarcode = result.codeResult.code;
-              setBarcodeOutput(decodedBarcode);
-              // Handle the decoded barcode as needed
+              setBarcode(decodedBarcode);
             } else {
-              setBarcodeOutput("No barcode found in the image.");
+              setBarcode("No barcode found in the image.");
             }
           }
         );
@@ -46,9 +48,10 @@ const FileBarcodeDecoder = () => {
 
   return (
     <div>
+      <p>Upload a clear barcode image</p>
       <input type="file" accept="image/*" onChange={handleFileChange} />
-      <div>Decoded Barcode: {barcodeOutput}</div>
       <button onClick={decodeBarcodeFromFile}>Decode Barcode</button>
+      <div>Decoded Barcode: {barcode}</div>
     </div>
   );
 };
