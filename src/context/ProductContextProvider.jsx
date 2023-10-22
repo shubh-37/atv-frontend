@@ -16,7 +16,7 @@ export default function ProductContextProvider({ children }) {
   const [product, setProduct] = useState({});
   async function createProduct(product) {
     try {
-      const response = await axios.post("http://150.129.182.25:3001", product, {
+      const response = await axios.post("https://150.129.182.25:3001", product, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -37,7 +37,7 @@ export default function ProductContextProvider({ children }) {
 
   async function searchBarcode(barcode) {
     try {
-      const response = await axios.get("http://150.129.182.25:3001/product/", {
+      const response = await axios.get("https://150.129.182.25:3001/product/", {
         params: { barcode },
         headers: {
           "Content-Type": "application/json",

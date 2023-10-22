@@ -12,7 +12,7 @@ export default function AuthContextProvider({ children }) {
   async function loginUser(user) {
     try {
       const response = await axios.post(
-        "http://150.129.182.25:3001/login",
+        "https://150.129.182.25:3001/login",
         user
       );
       console.log(response);
