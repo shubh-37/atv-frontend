@@ -9,14 +9,14 @@ import {
   SUCCESS,
   UNKNOWN,
 } from "../constants";
-
+const {VITE_API_URL} = import.meta.env;
 // eslint-disable-next-line react/prop-types
 export default function ProductContextProvider({ children }) {
   const [barcode, setBarcode] = useState("No barcode available");
   const [product, setProduct] = useState({});
   async function createProduct(product) {
     try {
-      const response = await axios.post("https://150.129.182.25:3001", product, {
+      const response = await axios.post(VITE_API_URL, product, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -37,7 +37,7 @@ export default function ProductContextProvider({ children }) {
 
   async function searchBarcode(barcode) {
     try {
-      const response = await axios.get("https://150.129.182.25:3001/product/", {
+      const response = await axios.get(`${VITE_API_URL}/product`, {
         params: { barcode },
         headers: {
           "Content-Type": "application/json",
