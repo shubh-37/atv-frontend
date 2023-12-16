@@ -18,7 +18,7 @@ export default function AuthContextProvider({ children }) {
       console.log(response);
       if (response.status === 200) {
         if (response.data.token) {
-          localStorage.setItem("token", response.data.token);
+          window.localStorage.setItem("token", response.data.token);
           setIslogin(true);
           navigate("/");
           return SUCCESS;
@@ -34,8 +34,9 @@ export default function AuthContextProvider({ children }) {
   }
 
   function logoutUser() {
-    localStorage.removeItem("token");
+    window.localStorage.removeItem("token");
     setIslogin(false);
+    navigate("/login");
   }
   return (
     <authContext.Provider value={{ loginUser, isLogin, logoutUser }}>
