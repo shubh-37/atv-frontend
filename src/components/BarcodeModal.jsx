@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { toast } from "react-toastify";
 import {
+  AUTH_FAILED,
   BAD_REQUEST,
   CREATE_PRODUCT,
   NOT_FOUND,
@@ -11,10 +12,12 @@ import {
 import { productContext } from "../context/ProductContextProvider";
 import FileBarcodeDecoder from "./FileUpload";
 import "../css/modal.css";
+import { authContext } from "../context/AuthContextProvider";
 
 // eslint-disable-next-line react/prop-types
 export default function BarcodeModal({ closeModal, openProductForm }) {
   const { searchBarcode, barcode, setBarcode } = useContext(productContext);
+  const {logoutUser} = useContext(authContext);
 
   function notify(event, type) {
     event.preventDefault();
@@ -40,6 +43,16 @@ export default function BarcodeModal({ closeModal, openProductForm }) {
       });
     } else if (type === NO_BARCODE) {
       toast.error("Please enter barcode to continue", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }else if (type === AUTH_FAILED) {
+      toast.error("Authentication failed. Please login again", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -76,7 +89,12 @@ export default function BarcodeModal({ closeModal, openProductForm }) {
         notify(e, CREATE_PRODUCT);
         closeModal(false);
         openProductForm(true);
-      } else {
+      } else if (response === AUTH_FAILED) {
+        notify(e, AUTH_FAILED);
+        closeModal(false);
+        logoutUser();
+      } 
+      else {
         notify(e, BAD_REQUEST);
       }
     }
