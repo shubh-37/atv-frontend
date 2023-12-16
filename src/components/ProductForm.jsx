@@ -221,47 +221,69 @@ export default function ProductForm({ closeModal }) {
                 {/* <button onClick={uploadImage}>Upload Image</button> */}
               </div>
             )}
-            <label htmlFor="cat1">Category 1</label>
+            <label htmlFor="craft">Craft category</label>
             <select
               className="input2"
               name="categoryOne"
-              id="cat1"
+              id="craft"
               onChange={(e) => categoryHandler(e)}
             >
-              <option value="Choose from category 1" disabled>
-                Choose from category 1
+              <option value="Choose from Craft category" disabled>
+                Choose from Craft category
               </option>
-              <option value="Category1Value1">value1</option>
-              <option value="Category1Value2">value2</option>
-              <option value="Category1Value3">value3</option>
+              <option value="Ajrakh">Ajrakh</option>
+              <option value="Bandhni">Bandhni</option>
+              <option value="Batik">Batik</option>
+              <option value="Block Printed">Block Printed</option>
+              <option value="Brocade">Brocade</option>
+              <option value="Chikankari">Chikankari</option>
+              <option value="Cutwork">Cutwork</option>
+              <option value="Embroidered">Embroidered</option>
+              <option value="Embroidery">Embroidery</option>
+              <option value="Extra Weft Kadwa">Extra Weft Kadwa</option>
+              <option value="Gota Patti">Gota Patti</option>
+              <option value="Hand Paint">Hand Paint</option>
+              <option value="Jamdani">Jamdani</option>
+              <option value="Hand Painted">Hand Painted</option>
+              <option value="Ikat">Ikat</option>
+              <option value="Kadwa">Kadwa</option>
             </select>
-            <label htmlFor="cat2">Category 2</label>
+            <label htmlFor="occasion">Occasion category</label>
             <select
               className="input2"
               name="categoryTwo"
-              id="cat2"
+              id="occasion"
               onChange={(e) => categoryHandler(e)}
             >
               <option value="" disabled>
-                Choose from category 2
+                Choose from Occasion category
               </option>
-              <option value="Category2Value1">value1</option>
-              <option value="Category2Value2">value2</option>
-              <option value="Category2Value3">value3</option>
+              <option value="Bridal Wear">Bridal Wear</option>
+              <option value="Casual Wear">Casual Wear</option>
+              <option value="Daily Wear">Daily Wear</option>
+              <option value="Festive Wear">Festive Wear</option>
+              <option value="Formal Wear">Formal Wear</option>
+              <option value="Party Wear">Party Wear</option>
+              <option value="Traditional Wear">Traditional Wear</option>
+              <option value="Wedding Wear">Wedding Wear</option>
+              <option value="Work Wear">Work Wear</option>
             </select>
-            <label htmlFor="cat3">Category 2</label>
+            <label htmlFor="fabric">Fabric category</label>
             <select
               className="input2"
               name="categoryThree"
-              id="cat3"
+              id="fabric"
               onChange={(e) => categoryHandler(e)}
             >
               <option value="" disabled>
-                Choose from category 3
+                Choose from Fabric category
               </option>
-              <option value="Category3Value1">value1</option>
-              <option value="Category3Value2">value2</option>
-              <option value="Category3Value3">value3</option>
+              <option value="Chiffon">Chiffon</option>
+              <option value="Cotton">Cotton</option>
+              <option value="Cotton and Combination">Cotton and Combination</option>
+              <option value="Crepe">Crepe</option>
+              <option value="Eri">Eri</option>
+              <option value="Georgette">Georgette</option>
             </select>
           </div>
           <div className="modal-footer">
