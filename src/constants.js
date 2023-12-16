@@ -6,6 +6,7 @@ const NO_BARCODE = "no barcode";
 const PRODUCT_FOUND = "product found";
 const CREATE_PRODUCT = "new product";
 const NO_IMAGE = "no image";
+const AUTH_FAILED = "authentication error"
 
 export {
   SUCCESS,
@@ -15,5 +16,6 @@ export {
   NO_BARCODE,
   PRODUCT_FOUND,
   CREATE_PRODUCT,
-  NO_IMAGE
+  NO_IMAGE,
+  AUTH_FAILED
 };
