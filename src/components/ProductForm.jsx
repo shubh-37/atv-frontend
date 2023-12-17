@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import Webcam from "react-webcam";
@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 export default function ProductForm({ closeModal }) {
-  const { createProduct, barcode, product, setProduct } =
+  const { createProduct, barcode, product, setProduct, getAllCategory, categoryOne, categoryTwo, categoryThree } =
     useContext(productContext);
   function notify(event, type) {
     event.preventDefault();
@@ -173,6 +173,9 @@ export default function ProductForm({ closeModal }) {
     }
   }
 
+  useEffect(() => {
+   getAllCategory();
+  }, []);
   return (
     <div>
       {/* this div is for the background */}
@@ -232,23 +235,10 @@ export default function ProductForm({ closeModal }) {
               <option value="Choose from Craft category" disabled>
                 Choose from Craft category
               </option>
-              <option value="No value" defaultChecked>No value</option>
-              <option value="Ajrakh">Ajrakh</option>
-              <option value="Bandhni">Bandhni</option>
-              <option value="Batik">Batik</option>
-              <option value="Block Printed">Block Printed</option>
-              <option value="Brocade">Brocade</option>
-              <option value="Chikankari">Chikankari</option>
-              <option value="Cutwork">Cutwork</option>
-              <option value="Embroidered">Embroidered</option>
-              <option value="Embroidery">Embroidery</option>
-              <option value="Extra Weft Kadwa">Extra Weft Kadwa</option>
-              <option value="Gota Patti">Gota Patti</option>
-              <option value="Hand Paint">Hand Paint</option>
-              <option value="Jamdani">Jamdani</option>
-              <option value="Hand Painted">Hand Painted</option>
-              <option value="Ikat">Ikat</option>
-              <option value="Kadwa">Kadwa</option>
+              {categoryOne.map(item => (
+                <option key={item} value={item}>{item}</option>
+              ))}
+              <option value="Other">Other</option>
             </select>
             <label htmlFor="occasion">Occasion category</label>
             <select
@@ -260,16 +250,10 @@ export default function ProductForm({ closeModal }) {
               <option value="" disabled>
                 Choose from Occasion category
               </option>
-              <option value="No value" defaultChecked>No value</option>
-              <option value="Bridal Wear">Bridal Wear</option>
-              <option value="Casual Wear">Casual Wear</option>
-              <option value="Daily Wear">Daily Wear</option>
-              <option value="Festive Wear">Festive Wear</option>
-              <option value="Formal Wear">Formal Wear</option>
-              <option value="Party Wear">Party Wear</option>
-              <option value="Traditional Wear">Traditional Wear</option>
-              <option value="Wedding Wear">Wedding Wear</option>
-              <option value="Work Wear">Work Wear</option>
+              {categoryTwo.map(item => (
+                <option key={item} value={item}>{item}</option>
+              ))}
+              <option value="Other">Other</option>
             </select>
             <label htmlFor="fabric">Fabric category</label>
             <select
@@ -281,13 +265,10 @@ export default function ProductForm({ closeModal }) {
               <option value="" disabled>
                 Choose from Fabric category
               </option>
-              <option value="No value" defaultChecked>No value</option>
-              <option value="Chiffon">Chiffon</option>
-              <option value="Cotton">Cotton</option>
-              <option value="Cotton and Combination">Cotton and Combination</option>
-              <option value="Crepe">Crepe</option>
-              <option value="Eri">Eri</option>
-              <option value="Georgette">Georgette</option>
+              {categoryThree.map(item => (
+                <option key={item} value={item}>{item}</option>
+              ))}
+              <option value="Other">Other</option>
             </select>
           </div>
           <div className="modal-footer">
