@@ -1,5 +1,4 @@
 import { createContext } from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 export const authContext = createContext();
 import axios from "axios";
@@ -7,7 +6,6 @@ import { NOT_FOUND, SUCCESS, UNKNOWN } from "../constants";
 const {VITE_API_URL} = import.meta.env;
 // eslint-disable-next-line react/prop-types
 export default function AuthContextProvider({ children }) {
-  const [isLogin, setIslogin] = useState(false);
   const navigate = useNavigate();
   async function loginUser(user) {
     try {
@@ -19,7 +17,6 @@ export default function AuthContextProvider({ children }) {
       if (response.status === 200) {
         if (response.data.token) {
           window.localStorage.setItem("token", response.data.token);
-          setIslogin(true);
           navigate("/");
           return SUCCESS;
         }
@@ -35,11 +32,10 @@ export default function AuthContextProvider({ children }) {
 
   function logoutUser() {
     window.localStorage.removeItem("token");
-    setIslogin(false);
     navigate("/login");
   }
   return (
-    <authContext.Provider value={{ loginUser, isLogin, logoutUser }}>
+    <authContext.Provider value={{ loginUser, logoutUser }}>
       {children}
     </authContext.Provider>
   );
