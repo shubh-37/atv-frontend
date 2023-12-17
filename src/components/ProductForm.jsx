@@ -231,6 +231,7 @@ export default function ProductForm({ closeModal }) {
               <option value="Choose from Craft category" disabled>
                 Choose from Craft category
               </option>
+              <option value="No value" defaultChecked>No value</option>
               <option value="Ajrakh">Ajrakh</option>
               <option value="Bandhni">Bandhni</option>
               <option value="Batik">Batik</option>
@@ -258,6 +259,7 @@ export default function ProductForm({ closeModal }) {
               <option value="" disabled>
                 Choose from Occasion category
               </option>
+              <option value="No value" defaultChecked>No value</option>
               <option value="Bridal Wear">Bridal Wear</option>
               <option value="Casual Wear">Casual Wear</option>
               <option value="Daily Wear">Daily Wear</option>
@@ -278,6 +280,7 @@ export default function ProductForm({ closeModal }) {
               <option value="" disabled>
                 Choose from Fabric category
               </option>
+              <option value="No value" defaultChecked>No value</option>
               <option value="Chiffon">Chiffon</option>
               <option value="Cotton">Cotton</option>
               <option value="Cotton and Combination">Cotton and Combination</option>
