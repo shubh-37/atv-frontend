@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Quagga from "quagga";
 import { useContext } from "react";
 import { productContext } from "../context/ProductContextProvider";
 
@@ -9,38 +8,39 @@ const FileBarcodeDecoder = () => {
   // const [barcodeOutput, setBarcodeOutput] = useState("No barcode selected");
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    setFile(selectedFile);
+    console.log(selectedFile);
+    setFile(URL.createObjectURL(selectedFile));
   };
 
   const decodeBarcodeFromFile = () => {
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const imageBase64 = event.target.result;
+      // check compatibility
+      if (!("BarcodeDetector" in globalThis)) {
+        alert("Barcode Detector is not supported by this browser.");
+      } else {
+        console.log("Barcode Detector supported!");
 
-        // Initialize QuaggaJS
-        Quagga.decodeSingle(
-          {
-            src: imageBase64,
-            numOfWorkers: 4,
-            decoder: { readers: ["code_93_reader"] }, // Use the Code 93 reader
-            locate: true,
-            area: { top: "10%", right: "10%", left: "10%", bottom: "10%" }, // Adjust the area of interest
-            // Adjust other properties as needed
-          },
-          (result) => {
-            if (result && result.codeResult) {
-              const decodedBarcode = result.codeResult.code;
-              setBarcode(decodedBarcode);
-            } else {
-              setBarcode("No barcode found in the image.");
-            }
-          }
-        );
-      };
-
-      // Read the selected file as a data URL
-      reader.readAsDataURL(file);
+        // create new detector
+        //   const reader = new FileReader();
+        // reader.onload = (event) => {
+        console.log(event.target.result);
+        console.log(file instanceof Blob);
+        // const imageBase64 = event.target.result;
+        const imageEl = document.getElementById("barcodeImageEle");
+        const barcodeDetector = new BarcodeDetector({
+          formats: ["code_93"],
+        });
+        barcodeDetector
+          .detect(imageEl)
+          .then((barcodes) => {
+            barcodes.forEach((barcode) => {console.log(barcode.rawValue); setBarcode(barcode.rawValue);});
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        // }
+        // reader.readAsDataURL(file);
+      }
     } else {
       console.error("No file selected.");
     }
@@ -50,7 +50,12 @@ const FileBarcodeDecoder = () => {
     <div className="modal-body">
       <p>Upload a clear barcode image</p>
       <input type="file" accept="image/*" onChange={handleFileChange} />
-      <button className="button1" onClick={decodeBarcodeFromFile}>Decode Barcode</button>
+      <div style={{padding: '20px'}}>
+      <img src={file} id="barcodeImageEle" style={{'height': '200px',  width: '90vw'  }} alt="image of barcode" />
+      </div>
+      <button className="button1" onClick={decodeBarcodeFromFile}>
+        Decode Barcode
+      </button>
       <div>Decoded Barcode: {barcode}</div>
     </div>
   );

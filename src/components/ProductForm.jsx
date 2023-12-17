@@ -65,8 +65,8 @@ export default function ProductForm({ closeModal }) {
   }
   
   const videoConstraints = {
-    width: { ideal: 1000 }, // Set the desired width
-    height: { ideal: 1000 } , // Set the desired height
+    width: { ideal: 720 }, // Set the desired width
+    height: { ideal: 320 } , // Set the desired height
     facingMode: "environment", // You can specify 'user' for the front camera or 'environment' for the rear camera
   };
   const [click, setClick] = useState(false);
