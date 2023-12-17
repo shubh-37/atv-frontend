@@ -15,6 +15,9 @@ const {VITE_API_URL} = import.meta.env;
 export default function ProductContextProvider({ children }) {
   const [barcode, setBarcode] = useState("No barcode available");
   const [product, setProduct] = useState({});
+  const [categoryOne, setCategoryOne] = useState([]);
+  const [categoryTwo, setCategoryTwo] = useState([]);
+  const [categoryThree, setCategoryThree] = useState([]);
   async function createProduct(product) {
     try {
       const token = window.localStorage.getItem("token");
@@ -64,6 +67,19 @@ export default function ProductContextProvider({ children }) {
       }
     }
   }
+
+  async function getAllCategory(){
+    try {
+      const response = await axios.get(`${VITE_API_URL}/category`, {});
+      if(response.status === 200){
+        setCategoryOne(response.data.categoryResponse[0]['categoryOne'])
+        setCategoryTwo(response.data.categoryResponse[0]['categoryTwo'])
+        setCategoryThree(response.data.categoryResponse[0]['categoryThree'])
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <productContext.Provider
       value={{
@@ -73,6 +89,10 @@ export default function ProductContextProvider({ children }) {
         setBarcode,
         searchBarcode,
         setProduct,
+        getAllCategory,
+        categoryOne,
+        categoryTwo,
+        categoryThree
       }}
     >
       {children}
