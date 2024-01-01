@@ -33,6 +33,7 @@ background: #47b14a;
 color: #fff;
 font-size: 16px;
 cursor: pointer;
+transform: translateY(-100%);
 }
 
 .input1 {
