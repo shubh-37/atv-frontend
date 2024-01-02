@@ -131,7 +131,7 @@ export default function BarcodeModal({ closeModal, openProductForm }) {
                 id=""
                 onChange={(e) => setBarcode(e.target.value)}
               />
-              <button className="button2" onClick={(e) => searchHandler(e)}>
+              <button className="button3" onClick={(e) => searchHandler(e)}>
                 Upload
               </button>
             </span>

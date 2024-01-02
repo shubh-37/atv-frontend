@@ -25,7 +25,7 @@ font-size: 16px;
 cursor: pointer;
 }
 
-.button2{
+.button2, .button3{
   margin-left: 8px;
 padding: 10px;
 border-radius: 10px;
@@ -33,7 +33,14 @@ background: #47b14a;
 color: #fff;
 font-size: 16px;
 cursor: pointer;
+<<<<<<< HEAD
 transform: translateY(-100%);
+=======
+}
+
+.button2{
+  transform: translateY(-150%);
+>>>>>>> 786b2a5 (changed capture btn position)
 }
 
 .input1 {
