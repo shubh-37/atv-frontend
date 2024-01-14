@@ -1,62 +1,75 @@
-import { useState } from "react";
+import { useRef, useEffect } from "react";
 import { useContext } from "react";
 import { productContext } from "../context/ProductContextProvider";
 
 const FileBarcodeDecoder = () => {
   const { barcode, setBarcode } = useContext(productContext);
-  const [file, setFile] = useState(null);
-  // const [barcodeOutput, setBarcodeOutput] = useState("No barcode selected");
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    console.log(selectedFile);
-    setFile(URL.createObjectURL(selectedFile));
-  };
+  const videoRef = useRef(null);
 
-  const decodeBarcodeFromFile = () => {
-    if (file) {
-      // check compatibility
-      if (!("BarcodeDetector" in globalThis)) {
-        alert("Barcode Detector is not supported by this browser.");
-      } else {
-        console.log("Barcode Detector supported!");
+useEffect(() => {
+  if (!("BarcodeDetector" in globalThis)) {
+    alert("Barcode Detector is not supported by this browser.");
+  } else {
+    // eslint-disable-next-line no-undef
+    const barcodeDetector = new BarcodeDetector({
+      formats: ["code_93"],
+    });
+const videoElement = videoRef.current;
 
-        // create new detector
-        //   const reader = new FileReader();
-        // reader.onload = (event) => {
-        console.log(event.target.result);
-        console.log(file instanceof Blob);
-        // const imageBase64 = event.target.result;
-        const imageEl = document.getElementById("barcodeImageEle");
-        const barcodeDetector = new BarcodeDetector({
-          formats: ["code_93"],
-        });
-        barcodeDetector
-          .detect(imageEl)
-          .then((barcodes) => {
-            barcodes.forEach((barcode) => {console.log(barcode.rawValue); setBarcode(barcode.rawValue);});
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        // }
-        // reader.readAsDataURL(file);
-      }
-    } else {
-      console.error("No file selected.");
+  const startCamera = async () => {
+    try {
+      // Get user media for the video stream
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoElement.srcObject = stream;
+    } catch (error) {
+      console.error('Error accessing camera:', error);
     }
   };
 
+  // Add an event listener for when the component mounts
+  startCamera();
+
+  // Create a canvas element to draw video frames onto
+  const canvasElement = document.createElement('canvas');
+
+  // Get the 2D context of the canvas
+  const canvasContext = canvasElement.getContext('2d');
+
+  // Continuously capture frames from the video and perform barcode detection
+  const captureFrame = async () => {
+    canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+    // Perform barcode detection on the current frame
+    try {
+      const barcodes = await barcodeDetector.detect(canvasElement);
+
+      if (barcodes.length > 0) {
+        // Handle detected barcodes here
+        setBarcode(barcodes[0].rawValue);
+      }
+    } catch (error) {
+      console.error('Barcode detection error:', error);
+    }
+
+    // Request the next frame
+    requestAnimationFrame(captureFrame);
+  };
+
+  // Add an event listener for when the video is loaded and ready
+  videoElement.addEventListener('loadedmetadata', () => {
+    canvasElement.width = videoElement.videoWidth;
+    canvasElement.height = videoElement.videoHeight;
+    captureFrame();
+  });
+}
+}, [])
+
   return (
     <div className="modal-body">
-      <p>Upload a clear barcode image</p>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      <div style={{padding: '20px'}}>
-      <img src={file} id="barcodeImageEle" style={{'height': '200px',  width: '90vw'  }} alt="image of barcode" />
-      </div>
-      <button className="button1" onClick={decodeBarcodeFromFile}>
-        Decode Barcode
-      </button>
+      <div>
+      <video ref={videoRef} autoPlay playsInline muted width="540" height="300"></video>
       <div>Decoded Barcode: {barcode}</div>
+    </div>
     </div>
   );
 };
