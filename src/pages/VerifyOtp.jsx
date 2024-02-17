@@ -4,10 +4,9 @@ import { toast } from "react-toastify";
 import "../css/login.css";
 import { NOT_FOUND, SUCCESS } from "../constants";
 
-export default function Login() {
+export default function VerifyOtp() {
   const { loginUser } = useContext(authContext);
   const [user, setUser] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
 
   function notify(event, type) {
     event.preventDefault();
@@ -65,7 +64,7 @@ export default function Login() {
   return (
     <div className="background">
       <div className="signup-parent">
-        <p className="signup-heading">Login to your account</p>
+        <p className="signup-heading">Enter your OTP</p>
         <form onSubmit={(e) => submitLogin(e)} className="form-parent">
           <label htmlFor="mobileNumber">Enter mobile number</label>
           <input
@@ -76,31 +75,8 @@ export default function Login() {
             required
             onChange={(e) => inputHandler(e)}
           />
-          {/* <label htmlFor="password">Password</label>
-          <div style={{ position: "relative" }}>
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter password"
-              id="password"
-              name="password"
-              onChange={(e) => inputHandler(e)}
-              style={{ paddingRight: "30px", width: "86%" }}
-            />
-            <span
-              style={{
-                position: "absolute",
-                right: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-              }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "👁️" : "🙈"}
-            </span>
-          </div> */}
           <button type="submit" className="signup-btn">
-            Send OTP
+            Verify OTP
           </button>
         </form>
       </div>
