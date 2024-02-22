@@ -1,58 +1,56 @@
-import { useContext, useState } from "react";
-import { authContext } from "../context/AuthContextProvider";
-import { toast } from "react-toastify";
-import "../css/login.css";
-import { NOT_FOUND, SUCCESS } from "../constants";
+import { useContext, useState } from 'react';
+import { authContext } from '../context/AuthContextProvider';
+import { toast } from 'react-toastify';
+import '../css/login.css';
+import { NOT_FOUND, SUCCESS } from '../constants';
 
 export default function Login() {
-  const { loginUser } = useContext(authContext);
-  const [user, setUser] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
-
+  const { loginUser, phoneNumber, setPhoneNumber } = useContext(authContext);
+  const [isValid, setIsValid] = useState(false);
   function notify(event, type) {
     event.preventDefault();
     if (type === NOT_FOUND) {
-      toast.error("User not found!", {
-        position: "top-right",
+      toast.error('User not found!', {
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
     } else if (type === SUCCESS) {
-      toast.success("Login successful!", {
-        position: "bottom-center",
+      toast.success('Login successful!', {
+        position: 'bottom-center',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
     } else {
-      toast.error("Please try again after sometime!", {
-        position: "top-right",
+      toast.error('Please try again after sometime!', {
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
     }
   }
 
   function inputHandler(e) {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value,
-    });
+    const mobileNumber = e.target.value.trim();
+
+    setPhoneNumber(mobileNumber);
+    setIsValid(/^[6-9]\d{9}$/.test(mobileNumber));
   }
   async function submitLogin(e) {
     e.preventDefault();
-    const response = await loginUser(user);
+    const response = await loginUser(phoneNumber);
     if (response === SUCCESS) {
       notify(e, response);
     } else if (response === NOT_FOUND) {
@@ -69,37 +67,21 @@ export default function Login() {
         <form onSubmit={(e) => submitLogin(e)} className="form-parent">
           <label htmlFor="mobileNumber">Enter mobile number</label>
           <input
-            type="number"
+            type="text"
             name="mobileNumber"
             id="mobileNumber"
-            placeholder="Mobile Number"
+            value={phoneNumber}
             required
+            placeholder="Enter your mobile number"
+            maxLength="10"
             onChange={(e) => inputHandler(e)}
           />
-          {/* <label htmlFor="password">Password</label>
-          <div style={{ position: "relative" }}>
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter password"
-              id="password"
-              name="password"
-              onChange={(e) => inputHandler(e)}
-              style={{ paddingRight: "30px", width: "86%" }}
-            />
-            <span
-              style={{
-                position: "absolute",
-                right: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-              }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "👁️" : "🙈"}
-            </span>
-          </div> */}
-          <button type="submit" className="signup-btn">
+          <button
+            type="submit"
+            className="signup-btn"
+            style={{ backgroundColor: isValid ? '#007bff' : 'grey' }}
+            disabled={!isValid}
+          >
             Send OTP
           </button>
         </form>
