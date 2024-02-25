@@ -2,15 +2,25 @@ import { useContext, useEffect, useState } from 'react';
 import { authContext } from '../context/AuthContextProvider';
 import { toast } from 'react-toastify';
 import '../css/login.css';
-import { NOT_FOUND, SUCCESS } from '../constants';
+import {
+  AUTH_FAILED,
+  INTERAKT_ERROR,
+  MAX_RETRY_REACHED,
+  NOT_FOUND,
+  OTP_SUCCESS,
+  SESSION_TIMED_OUT,
+  SUCCESS
+} from '../constants';
+import { useNavigate } from 'react-router-dom';
 
 export default function VerifyOtp() {
-  const { verifyOtp, phoneNumber } = useContext(authContext);
+  const { verifyOtp, phoneNumber, loginUser, setPhoneNumber } = useContext(authContext);
   const [otp, setOtp] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [counter, setCounter] = useState(30); // Initial counter value
   const [isResendEnabled, setIsResendEnabled] = useState(false);
-
+  const navigate = useNavigate();
+  const mobileNumber = window.localStorage.getItem('mobileNumber');
   useEffect(() => {
     let intervalId;
     if (counter > 0) {
@@ -26,8 +36,29 @@ export default function VerifyOtp() {
     return () => clearInterval(intervalId);
   }, [counter]);
 
-  const handleResendClick = () => {
-    // Reset counter to initial value and disable resend button
+  const handleResendClick = async (e) => {
+    const response = await loginUser(phoneNumber.length ? phoneNumber : mobileNumber);
+    if (response === OTP_SUCCESS) {
+      notify(e, response);
+    } else if (response === NOT_FOUND) {
+      notify(e, response);
+    } else if (response === AUTH_FAILED) {
+      notify(e, response);
+    } else if (response === SESSION_TIMED_OUT) {
+      notify(e, response);
+      navigate('/login');
+      setPhoneNumber('');
+    } else if (response === MAX_RETRY_REACHED) {
+      notify(e, response);
+      navigate('/login');
+      setPhoneNumber('');
+    } else if (response === INTERAKT_ERROR) {
+      notify(e, response);
+      navigate('/login');
+      setPhoneNumber('');
+    } else {
+      notify(e, response);
+    }
     setCounter(30);
     setIsResendEnabled(false);
   };
@@ -44,9 +75,59 @@ export default function VerifyOtp() {
         draggable: true,
         progress: undefined
       });
+    } else if (type === AUTH_FAILED) {
+      toast.error('Incorrect OTP!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+    } else if (type === INTERAKT_ERROR) {
+      toast.error('Interakt error! Please contact admin.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+    } else if (type === SESSION_TIMED_OUT) {
+      toast.error('Session Timed out! Login again.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+    } else if (type === MAX_RETRY_REACHED) {
+      toast.error('Max retry reached. Please login again.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+    } else if (type === OTP_SUCCESS) {
+      toast.success('OTP sent successfully!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
     } else if (type === SUCCESS) {
       toast.success('Login successful!', {
-        position: 'bottom-center',
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -68,17 +149,25 @@ export default function VerifyOtp() {
   }
 
   function inputHandler(e) {
-    const userOtp = Number(e.target.value.trim());
+    const userOtp = e.target.value.trim();
     setOtp(userOtp);
     setIsValid(/^[0-9]\d{3}$/.test(userOtp));
   }
   async function submitLogin(e) {
     e.preventDefault();
-    const response = await verifyOtp(phoneNumber, otp);
+    const response = await verifyOtp(phoneNumber.length ? phoneNumber : mobileNumber, otp);
     if (response === SUCCESS) {
       notify(e, response);
     } else if (response === NOT_FOUND) {
       notify(e, response);
+      navigate('/login');
+      setPhoneNumber('');
+    } else if (response === AUTH_FAILED) {
+      notify(e, response);
+    } else if (response === SESSION_TIMED_OUT) {
+      notify(e, response);
+      navigate('/login');
+      setPhoneNumber('');
     } else {
       notify(e, response);
     }
@@ -89,7 +178,7 @@ export default function VerifyOtp() {
       <div className="signup-parent">
         <p className="signup-heading">OTP Verification</p>
         <form onSubmit={(e) => submitLogin(e)} className="form-parent">
-          <label htmlFor="mobileNumber">OTP sent to {`+91-${phoneNumber}` ?? 'No phone Number'}</label>
+          <label htmlFor="mobileNumber">OTP sent to {`+91-${phoneNumber.length ? phoneNumber : mobileNumber}`}</label>
           <input
             type="text"
             name="mobileNumber"
@@ -108,13 +197,13 @@ export default function VerifyOtp() {
           >
             Verify OTP
           </button>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <button onClick={handleResendClick} disabled={!isResendEnabled}>
-              Resend
-            </button>
-            <p style={{ fontSize: '17px', padding: '5px' }}> OTP in: {counter} seconds</p>
-          </div>
         </form>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <button onClick={(e) => handleResendClick(e)} disabled={!isResendEnabled}>
+            Resend
+          </button>
+          <p style={{ fontSize: '17px', padding: '5px' }}> OTP in: {counter} seconds</p>
+        </div>
       </div>
     </div>
   );
