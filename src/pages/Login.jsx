@@ -2,7 +2,14 @@ import { useContext, useState } from 'react';
 import { authContext } from '../context/AuthContextProvider';
 import { toast } from 'react-toastify';
 import '../css/login.css';
-import { NOT_FOUND, SUCCESS } from '../constants';
+import {
+  AUTH_FAILED,
+  INTERAKT_ERROR,
+  MAX_RETRY_REACHED,
+  NOT_FOUND,
+  OTP_SUCCESS,
+  SESSION_TIMED_OUT
+} from '../constants';
 
 export default function Login() {
   const { loginUser, phoneNumber, setPhoneNumber } = useContext(authContext);
@@ -19,9 +26,49 @@ export default function Login() {
         draggable: true,
         progress: undefined
       });
-    } else if (type === SUCCESS) {
-      toast.success('Login successful!', {
-        position: 'bottom-center',
+    } else if (type === INTERAKT_ERROR) {
+      toast.error('Interakt error! Please contact admin.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+    } else if (type === AUTH_FAILED) {
+      toast.error('User not found!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+    } else if (type === MAX_RETRY_REACHED) {
+      toast.error('Max retry reached. Please login again.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+    } else if (type === SESSION_TIMED_OUT) {
+      toast.error('Session timed out! Please login again.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+    } else if (type === OTP_SUCCESS) {
+      toast.success('OTP sent successfully!', {
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -51,12 +98,25 @@ export default function Login() {
   async function submitLogin(e) {
     e.preventDefault();
     const response = await loginUser(phoneNumber);
-    if (response === SUCCESS) {
+    if (response === OTP_SUCCESS) {
       notify(e, response);
     } else if (response === NOT_FOUND) {
       notify(e, response);
+      setPhoneNumber('');
+    } else if (response === AUTH_FAILED) {
+      notify(e, response);
+    } else if (response === SESSION_TIMED_OUT) {
+      notify(e, response);
+      setPhoneNumber('');
+    } else if (response === MAX_RETRY_REACHED) {
+      notify(e, response);
+      setPhoneNumber('');
+    } else if (response === INTERAKT_ERROR) {
+      notify(e, response);
+      setPhoneNumber('');
     } else {
       notify(e, response);
+      setPhoneNumber('');
     }
   }
 
