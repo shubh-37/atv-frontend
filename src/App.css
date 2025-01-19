@@ -1,6 +1,11 @@
-.webcam{
+.webcam {
   width: 100%;
   display: flex;
   justify-content: center;
   margin: 0.5rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
