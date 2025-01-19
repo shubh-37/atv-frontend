@@ -21,7 +21,7 @@ export default function ProductContextProvider({ children }) {
   async function createProduct(product) {
     try {
       const token = window.localStorage.getItem("token");
-      const response = await axios.post(VITE_API_URL, product, {
+      const response = await axios.post('https://backend.atvggn.in', product, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ export default function ProductContextProvider({ children }) {
   async function searchBarcode(barcode) {
     try {
       const token = window.localStorage.getItem("token");
-      const response = await axios.get(`${VITE_API_URL}/product`, {
+      const response = await axios.get(`https://backend.atvggn.in/product`, {
         params: { barcode },
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export default function ProductContextProvider({ children }) {
 
   async function getAllCategory(){
     try {
-      const response = await axios.get(`${VITE_API_URL}/category`, {});
+      const response = await axios.get(`https://backend.atvggn.in/category`, {});
       if(response.status === 200){
         setCategoryOne(response.data.categoryResponse[0]['categoryOne'])
         setCategoryTwo(response.data.categoryResponse[0]['categoryTwo'])

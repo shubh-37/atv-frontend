@@ -20,7 +20,7 @@ export default function AuthContextProvider({ children }) {
   async function loginUser(mobileNumber) {
     try {
       window.localStorage.setItem('mobileNumber', mobileNumber);
-      const response = await axios.post(`${VITE_API_URL}/sendOtp`, { mobileNumber });
+      const response = await axios.post(`https://backend.atvggn.in/sendOtp`, { mobileNumber });
       if (response.status === 200) {
         navigate('/verify-otp');
         return OTP_SUCCESS;
@@ -44,7 +44,7 @@ export default function AuthContextProvider({ children }) {
   async function verifyOtp(mobileNumber, otp) {
     const data = { mobileNumber, otp: Number(otp) };
     try {
-      const response = await axios.post(`${VITE_API_URL}/verifyOtp`, data);
+      const response = await axios.post(`https://backend.atvggn.in/verifyOtp`, data);
       if (response.status === 200) {
         if (response.data.token) {
           window.localStorage.setItem('token', response.data.token);
